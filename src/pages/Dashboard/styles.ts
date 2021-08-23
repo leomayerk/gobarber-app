@@ -1,9 +1,8 @@
 import styled from 'styled-components/native';
-import { FlatList } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { FlatList } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
-
-import { Provider } from './index';
+import { Provider } from '.';
 
 export const Container = styled.View`
   flex: 1;
@@ -13,7 +12,6 @@ export const Header = styled.View`
   padding: 24px;
   padding-top: ${getStatusBarHeight() + 24}px;
   background: #28262e;
-
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -50,19 +48,19 @@ export const ProvidersList = styled(
 })``;
 
 export const ProvidersListTitle = styled.Text`
+  font-family: 'RobotoSlab-Medium';
+  color: #f4ede8;
   font-size: 24px;
   margin-bottom: 24px;
-  color: #f4ede8;
-  font-family: 'RobotoSlab-Medium';
 `;
 
 export const ProviderContainer = styled(RectButton)`
-  background: #3e3b47;
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 16px;
   flex-direction: row;
   align-items: center;
+  padding: 20px;
+  margin-bottom: 16px;
+  background: #3e3b47;
+  border-radius: 10px;
 `;
 
 export const ProviderAvatar = styled.Image`

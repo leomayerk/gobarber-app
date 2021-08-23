@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect, useCallback } from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 
-import { useAuth } from '../../hooks/auth';
+import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
+import { useAuth } from '../../hooks/auth';
 import {
   Container,
   Header,
@@ -28,9 +28,9 @@ export interface Provider {
 }
 
 const Dashboard: React.FC = () => {
-  const [providers, setProviders] = useState<Provider[]>([]);
   const { signOut, user } = useAuth();
-  const { navigate } = useNavigation();
+  const navigation = useNavigation();
+  const [providers, setProviders] = useState<Provider[]>([]);
 
   useEffect(() => {
     api.get('providers').then(response => {
@@ -38,28 +38,24 @@ const Dashboard: React.FC = () => {
     });
   }, []);
 
-  const navigateToProfile = useCallback(() => {
-    // navigate('Profile');
-    signOut();
-  }, [signOut]);
-
-  const navigateToCreateAppointment = useCallback(
+  const handleSelectProvider = useCallback(
     (providerId: string) => {
-      navigate('CreateAppointment', { providerId });
+      navigation.navigate('AppointmentDatePicker', { providerId });
     },
-    [navigate],
+    [navigation],
   );
 
   return (
     <Container>
       <Header>
         <HeaderTitle>
-          Bem vindo,
-          {'\n'}
+          Bem vindo, 
+{' '}
+{'\n'}
           <UserName>{user.name}</UserName>
         </HeaderTitle>
 
-        <ProfileButton onPress={navigateToProfile}>
+        <ProfileButton onPress={() => navigation.navigate('Profile')}>
           <UserAvatar source={{ uri: user.avatar_url }} />
         </ProfileButton>
       </Header>
@@ -68,22 +64,18 @@ const Dashboard: React.FC = () => {
         data={providers}
         keyExtractor={provider => provider.id}
         ListHeaderComponent={
-          <ProvidersListTitle>Cabeleireiros</ProvidersListTitle>
+          <ProvidersListTitle>Cabelereiros</ProvidersListTitle>
         }
         renderItem={({ item: provider }) => (
-          <ProviderContainer
-            onPress={() => navigateToCreateAppointment(provider.id)}
-          >
+          <ProviderContainer onPress={() => handleSelectProvider(provider.id)}>
             <ProviderAvatar source={{ uri: provider.avatar_url }} />
 
             <ProviderInfo>
               <ProviderName>{provider.name}</ProviderName>
-
               <ProviderMeta>
                 <Icon name="calendar" size={14} color="#ff9000" />
                 <ProviderMetaText>Segunda à sexta</ProviderMetaText>
               </ProviderMeta>
-
               <ProviderMeta>
                 <Icon name="clock" size={14} color="#ff9000" />
                 <ProviderMetaText>8h às 18h</ProviderMetaText>
